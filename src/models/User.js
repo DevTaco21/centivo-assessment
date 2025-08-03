@@ -1,13 +1,9 @@
 const { ObjectId } = require('mongodb');
-const database = require('../config/database');
+const BaseModel = require('./BaseModel');
 
-class User {
+class User extends BaseModel {
   constructor() {
-    this.collectionName = 'users';
-  }
-
-  getCollection() {
-    return database.getDb().collection(this.collectionName);
+    super('users');
   }
 
   async findById(id) {
@@ -17,12 +13,9 @@ class User {
         throw new Error('Invalid user ID format');
       }
 
-      const collection = this.getCollection();
-      
-      // Query for user with matching _id and age > 21
-      const user = await collection.findOne({
-        _id: new ObjectId(id),
-        age: { $gt: 21 }
+      // Use BaseModel's findById with age filter
+      const user = await super.findById(new ObjectId(id), {
+        additionalFilters: { age: { $gt: 21 } }
       });
 
       return user;
@@ -31,44 +24,13 @@ class User {
     }
   }
 
-  async create(userData) {
-    try {
-      const collection = this.getCollection();
-      const result = await collection.insertOne(userData);
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async createMany(usersData) {
-    try {
-      const collection = this.getCollection();
-      const result = await collection.insertMany(usersData);
-      return result;
-    } catch (error) {
-      throw error;
-    }
+  // Custom methods specific to User model
+  async findAll() {
+    return await super.find({});
   }
 
   async deleteAll() {
-    try {
-      const collection = this.getCollection();
-      const result = await collection.deleteMany({});
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async findAll() {
-    try {
-      const collection = this.getCollection();
-      const users = await collection.find({}).toArray();
-      return users;
-    } catch (error) {
-      throw error;
-    }
+    return await super.deleteMany({});
   }
 }
 

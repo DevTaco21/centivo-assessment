@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const ResponseHelper = require('../utils/resHelper');
 
 class UserController {
   async getUserById(req, res) {
@@ -8,33 +9,26 @@ class UserController {
       const user = await User.findById(id);
 
       if (!user) {
-        return res.status(404).json({ 
-          error: 'User not found or user is 21 or younger' 
-        });
+        return ResponseHelper.notFound(res, 'User not found or user is 21 or younger');
       }
 
-      res.json(user);
+      return ResponseHelper.success(res, user, 'User retrieved successfully');
       
     } catch (error) {
       console.error('Error retrieving user:', error);
       
       if (error.message === 'Invalid user ID format') {
-        return res.status(400).json({ 
-          error: error.message 
-        });
+        return ResponseHelper.badRequest(res, error.message, error);
       }
       
-      res.status(500).json({ 
-        error: 'Internal server error' 
-      });
+      return ResponseHelper.error(res, 'Internal server error', 500, error);
     }
   }
 
   async getHealth(req, res) {
-    res.json({ 
-      status: 'OK', 
-      message: 'Server is running',
-      timestamp: new Date().toISOString()
+    return ResponseHelper.health(res, 'OK', {
+      version: process.env.npm_package_version || '1.0.0',
+      environment: process.env.NODE_ENV || 'development'
     });
   }
 }

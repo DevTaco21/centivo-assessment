@@ -1,6 +1,7 @@
 const express = require('express');
 const routes = require('./routes');
 const errorHandler = require('./middleware/errorHandler');
+const ResponseHelper = require('./utils/resHelper');
 
 const app = express();
 
@@ -19,10 +20,7 @@ app.use('/api', routes);
 
 // 404 handler for undefined routes
 app.use('*', (req, res) => {
-  res.status(404).json({
-    error: 'Route not found',
-    message: `Cannot ${req.method} ${req.originalUrl}`
-  });
+  ResponseHelper.notFound(res, `Cannot ${req.method} ${req.originalUrl}`);
 });
 
 // Error handling middleware (must be last)

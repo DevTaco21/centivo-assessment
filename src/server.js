@@ -6,14 +6,14 @@ const PORT = process.env.PORT || 3000;
 
 // Graceful shutdown handling
 const gracefulShutdown = async (signal) => {
-  console.log(`\n🛑 Received ${signal}. Starting graceful shutdown...`);
+  console.log(`\nReceived ${signal}. Starting graceful shutdown...`);
   
   try {
     await database.disconnect();
-    console.log('✅ Database disconnected');
+    console.log('Database disconnected');
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error during shutdown:', error);
+    console.error('Error during shutdown:', error);
     process.exit(1);
   }
 };
@@ -24,13 +24,13 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (error) => {
-  console.error('❌ Uncaught Exception:', error);
+      console.error('Uncaught Exception:', error);
   gracefulShutdown('uncaughtException');
 });
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
-  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+      console.error('Unhandled Rejection at:', promise, 'reason:', reason);
   gracefulShutdown('unhandledRejection');
 });
 
@@ -42,19 +42,19 @@ const startServer = async () => {
     
     // Start Express server
     const server = app.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
-      console.log(`📡 Health check: http://localhost:${PORT}/api/health`);
-      console.log(`👥 Users endpoint: http://localhost:${PORT}/api/users/:id`);
+          console.log(`Server is running on port ${PORT}`);
+    console.log(`Health check: http://localhost:${PORT}/api/health`);
+    console.log(`Users endpoint: http://localhost:${PORT}/api/users/:id`);
     });
 
     // Handle server errors
     server.on('error', (error) => {
-      console.error('❌ Server error:', error);
+      console.error('Server error:', error);
       gracefulShutdown('server error');
     });
 
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
+    console.error('Failed to start server:', error);
     process.exit(1);
   }
 };

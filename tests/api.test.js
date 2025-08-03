@@ -3,7 +3,7 @@ const axios = require('axios');
 const BASE_URL = 'http://localhost:3000/api';
 
 async function testAPI() {
-  console.log('🧪 Testing Centivo User API...\n');
+  console.log('Testing Centivo User API...\n');
 
   const tests = [
     {
@@ -55,25 +55,25 @@ async function testAPI() {
     try {
       const result = await test.test();
       if (result) {
-        console.log(`✅ ${test.name}`);
+        console.log(`PASS: ${test.name}`);
         passedTests++;
       } else {
-        console.log(`❌ ${test.name}`);
+        console.log(`FAIL: ${test.name}`);
       }
     } catch (error) {
       console.log(`❌ ${test.name} - Error: ${error.message}`);
     }
   }
 
-  console.log(`\n📊 Test Results: ${passedTests}/${totalTests} tests passed`);
+  console.log(`\nTest Results: ${passedTests}/${totalTests} tests passed`);
   
   if (passedTests === totalTests) {
-    console.log('🎉 All tests passed!');
+    console.log('All tests passed!');
   } else {
-    console.log('⚠️  Some tests failed');
+    console.log('Some tests failed');
   }
 
-  console.log('\n📝 Note: To test with real data, make sure you have:');
+      console.log('\nNote: To test with real data, make sure you have:');
   console.log('1. MongoDB running with a "users" collection');
   console.log('2. Sample users with age > 21 in the collection');
   console.log('3. Use valid ObjectIds from your database');
@@ -83,8 +83,8 @@ async function testAPI() {
 // Run tests if this file is executed directly
 if (require.main === module) {
   testAPI().catch(error => {
-    console.error('❌ Test suite failed:', error.message);
-    console.log('\n💡 Make sure the server is running on port 3000');
+    console.error('Test suite failed:', error.message);
+    console.log('\nMake sure the server is running on port 3000');
     process.exit(1);
   });
 }

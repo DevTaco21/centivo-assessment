@@ -1,28 +1,23 @@
+const ResponseHelper = require('../utils/resHelper');
+
 const errorHandler = (err, req, res, next) => {
   console.error('Error:', err);
 
   // Handle specific error types
   if (err.name === 'ValidationError') {
-    return res.status(400).json({
-      error: 'Validation Error',
-      message: err.message
-    });
+    return ResponseHelper.validationError(res, 'Validation Error', err.message);
   }
 
   if (err.name === 'CastError') {
-    return res.status(400).json({
-      error: 'Invalid ID format',
-      message: 'The provided ID is not valid'
-    });
+    return ResponseHelper.badRequest(res, 'The provided ID is not valid', err);
+  }
+
+  if (err.name === 'MongoError' && err.code === 11000) {
+    return ResponseHelper.conflict(res, 'Duplicate entry found', err);
   }
 
   // Default error response
-  res.status(500).json({
-    error: 'Internal Server Error',
-    message: process.env.NODE_ENV === 'production' 
-      ? 'Something went wrong' 
-      : err.message
-  });
+  return ResponseHelper.error(res, 'Internal Server Error', 500, err);
 };
 
 module.exports = errorHandler; 
