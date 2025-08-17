@@ -1,4 +1,4 @@
-# Boilerplate(Experess.js) User API
+# Boilerplate(express.js) User API
 
 Node.js Express API with MongoDB integration for user data retrieval with age filtering (> 21).
 
